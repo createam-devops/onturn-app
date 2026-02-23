@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { useToast } from '@/components/ui/toast'
 import { getProfile, updateProfile, updatePassword } from '@/lib/services/profile'
+import { perfilSchema, cambioPasswordSchema } from '@/lib/schemas'
 import { PublicHeader } from '@/components/public/PublicHeader'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
@@ -78,6 +79,15 @@ export default function ProfilePage() {
         setSaving(true)
         setMessage(null)
 
+        // Validar con Zod
+        const validation = perfilSchema.safeParse(formData)
+        if (!validation.success) {
+            const firstError = validation.error.errors[0]
+            setMessage({ type: 'error', text: firstError.message })
+            setSaving(false)
+            return
+        }
+
         try {
             const updated = await updateProfile(user.id, {
                 full_name: formData.full_name,
@@ -97,13 +107,11 @@ export default function ProfilePage() {
         e.preventDefault()
         setMessage(null)
 
-        if (passwordData.newPassword !== passwordData.confirmPassword) {
-            setMessage({ type: 'error', text: 'Las contraseñas no coinciden' })
-            return
-        }
-
-        if (passwordData.newPassword.length < 6) {
-            setMessage({ type: 'error', text: 'La contraseña debe tener al menos 6 caracteres' })
+        // Validar con Zod
+        const validation = cambioPasswordSchema.safeParse(passwordData)
+        if (!validation.success) {
+            const firstError = validation.error.errors[0]
+            setMessage({ type: 'error', text: firstError.message })
             return
         }
 

@@ -138,20 +138,10 @@ export async function getAvailableSlots(
     const slotDuration = settings?.slot_duration || 30
 
     // Obtener el día de la semana de la fecha seleccionada
-    // date viene como YYYY-MM-DD string.
-    // parseISO lo convierte correctamente a Date local o UTC según string. 
-    // Asumimos que "date" es la fecha LOCAL que ve el usuario.
-    // Para evitar problemas de timezone, creamos la fecha a las 00:00 local, o usamos parseISO y extraemos dia.
-    // Ojo: getDay() devuelve día local.
     const dateObj = parseISO(date)
-    // Ajuste importante: Si 'date' es '2024-01-29', parseISO devuelve '2024-01-29T00:00:00' local (si no tiene Z).
-    // Si viene solo fecha, parseISO la trata como local time. OK.
-
-    // date-fns v2/v3 getDay: 0=Sunday, 1=Monday...
-    // Nuestra DB: 0=Domingo... (Confirmado en view anterior de configuracion/page.tsx)
     const dayOfWeek = dateObj.getDay()
 
-    // Obtener horarios del negocio para ese día
+    // 1. Obtener horarios del negocio para ese día
     const { data: dayHours } = await supabase
       .from('business_hours')
       .select('open_time, close_time, is_closed')
@@ -163,8 +153,41 @@ export async function getAvailableSlots(
       return []
     }
 
-    // Obtener citas existentes para esa fecha
-    // Filtramos por fecha completa en rango local
+    // 2. Obtener disponibilidad del especialista (si se especificó)
+    let specialistAvailability: Array<{ start_time: string; end_time: string }> = []
+    
+    if (specialistId && specialistId !== 'any') {
+      const { data: availability } = await supabase
+        .from('specialist_availability')
+        .select('start_time, end_time')
+        .eq('specialist_id', specialistId)
+        .eq('day_of_week', dayOfWeek)
+        .eq('is_available', true)
+
+      specialistAvailability = availability || []
+
+      // Si el especialista no tiene disponibilidad configurada para este día, no hay slots
+      if (specialistAvailability.length === 0) {
+        return []
+      }
+
+      // 3. Verificar bloqueos específicos del especialista para esta fecha
+      const { data: blockedSlots } = await supabase
+        .from('specialist_blocked_slots')
+        .select('start_time, end_time')
+        .eq('specialist_id', specialistId)
+        .eq('blocked_date', date)
+
+      if (blockedSlots && blockedSlots.length > 0) {
+        // Si hay un bloqueo de día completo (start_time y end_time null)
+        const fullDayBlock = blockedSlots.some(block => !block.start_time && !block.end_time)
+        if (fullDayBlock) {
+          return [] // Día completamente bloqueado
+        }
+      }
+    }
+
+    // 4. Obtener citas existentes para esa fecha
     const startOfDayStr = `${date}T00:00:00`
     const endOfDayStr = `${date}T23:59:59`
 
@@ -172,7 +195,7 @@ export async function getAvailableSlots(
       .from('appointments')
       .select('start_time, end_time')
       .eq('business_id', businessId)
-      .in('status', ['confirmed', 'pending']) // Pending también bloquea para evitar doble booking inmediato
+      .in('status', ['confirmed', 'pending'])
       .gte('start_time', startOfDayStr)
       .lte('start_time', endOfDayStr)
 
@@ -182,14 +205,13 @@ export async function getAvailableSlots(
 
     const { data: appointments } = await query
 
-    // Generar slots
+    // 5. Generar slots basados en horarios del negocio
     const slots: string[] = []
 
-    // Parsear horas de apertura/cierre
+    // Parsear horas de apertura/cierre del negocio
     const [openHour, openMinute] = dayHours.open_time.split(':').map(Number)
     const [closeHour, closeMinute] = dayHours.close_time.split(':').map(Number)
 
-    // Crear fecha base para los slots (usando la fecha solicitada)
     let currentSlot = set(dateObj, {
       hours: openHour,
       minutes: openMinute,
@@ -206,28 +228,39 @@ export async function getAvailableSlots(
 
     const now = new Date()
 
-    // Iterar generando slots
+    // 6. Iterar generando slots y validando disponibilidad
     while (isBefore(currentSlot, closeTime)) {
       const endOfSlot = addMinutes(currentSlot, slotDuration)
 
-      // Si el turno termina después del cierre, no es válido (a menos que permitamos ultimo turno terminar al cierre)
-      // Usualmente si cierran a las 18:00, ultimo turno de 30m es 17:30-18:00.
-      // Si endOfSlot > closeTime, entonces se pasa.
-      if (isAfter(endOfSlot, closeTime)) break;
+      // Verificar que el slot no exceda el horario de cierre
+      if (isAfter(endOfSlot, closeTime)) break
 
-      // Si es hoy, filtrar horarios pasados
-      // Comparar currentSlot con now.
+      // Filtrar horarios pasados si es hoy
       if (isSameDay(dateObj, now) && isBefore(currentSlot, now)) {
         currentSlot = addMinutes(currentSlot, slotDuration)
         continue
       }
 
-      // Verificar colisiones
+      const slotTimeStr = format(currentSlot, 'HH:mm:ss')
+
+      // 7. Verificar si el slot está dentro de la disponibilidad del especialista
+      let isWithinSpecialistAvailability = true
+      
+      if (specialistId && specialistId !== 'any' && specialistAvailability.length > 0) {
+        isWithinSpecialistAvailability = specialistAvailability.some(avail => {
+          return slotTimeStr >= avail.start_time && slotTimeStr < avail.end_time
+        })
+      }
+
+      if (!isWithinSpecialistAvailability) {
+        currentSlot = addMinutes(currentSlot, slotDuration)
+        continue
+      }
+
+      // 8. Verificar colisiones con citas existentes
       const isOccupied = appointments?.some(app => {
         const appStart = new Date(app.start_time)
         const appEnd = new Date(app.end_time)
-
-        // Overlap: (StartA < EndB) and (EndA > StartB)
         return isBefore(currentSlot, appEnd) && isAfter(endOfSlot, appStart)
       })
 

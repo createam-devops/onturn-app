@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { loginSchema, type LoginFormData } from '@/lib/validations/schemas'
+import { loginSchema, type LoginInput } from '@/lib/schemas'
 import Link from 'next/link'
 
 function LoginForm() {
@@ -24,7 +24,7 @@ function LoginForm() {
     handleSubmit, 
     formState: { errors, isSubmitting },
     setError: setFormError 
-  } = useForm<LoginFormData>({
+  } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
@@ -32,7 +32,7 @@ function LoginForm() {
     }
   })
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (data: LoginInput) => {
     try {
       await login(data.email, data.password, redirectPath)
     } catch (err: any) {

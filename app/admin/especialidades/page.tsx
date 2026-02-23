@@ -7,6 +7,7 @@ import { useToast } from '@/components/ui/toast'
 import { useConfirm } from '@/hooks/useConfirm'
 import { createClient } from '@/lib/supabase/client'
 import { getUserBusinesses } from '@/lib/services/admin'
+import { especialidadSchema } from '@/lib/schemas'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -85,8 +86,21 @@ export default function EspecialidadesPage() {
   }
 
   const handleSave = async () => {
-    if (!business || !formData.name.trim()) {
-      showError('Por favor ingresa un nombre válido')
+    if (!business) {
+      showError('No se encontró el negocio')
+      return
+    }
+
+    // Validar con Zod
+    const validation = especialidadSchema.safeParse({
+      name: formData.name,
+      description: formData.description || undefined,
+      duration: formData.duration
+    })
+
+    if (!validation.success) {
+      const firstError = validation.error.errors[0]
+      showError(firstError.message)
       return
     }
 

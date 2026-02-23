@@ -31,7 +31,8 @@ export async function getAllSpecialistsByBusiness(businessId: string, includeIna
   if (error) throw error
   return data as Specialist[]
 }
-
+// Alias for compatibility
+export const getSpecialists = getAllSpecialistsByBusiness
 export async function getSpecialistBySlug(businessId: string, slug: string) {
   const { data, error } = await supabase
     .from('specialists')

@@ -1,0 +1,140 @@
+{
+  "name": "OnTurn Business - Panel de Gestión",
+  "short_name": "OnTurn Business",
+  "description": "Gestiona tu negocio, reservas y clientes desde tu dispositivo",
+  "start_url": "/admin/dashboard?source=pwa",
+  "scope": "/admin",
+  "display": "standalone",
+  "background_color": "#1e293b",
+  "theme_color": "#0f172a",
+  "orientation": "any",
+  "categories": ["business", "productivity", "management"],
+  "lang": "es-AR",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/icons/business-icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/business-icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/business-icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/business-icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/business-icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/business-icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/business-icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/business-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/business-dashboard.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshots/business-appointments.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshots/business-analytics.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Inicio",
+      "description": "Ver panel de control",
+      "url": "/admin/dashboard?source=pwa_shortcut",
+      "icons": [
+        {
+          "src": "/icons/shortcut-dashboard.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Reservas",
+      "short_name": "Reservas",
+      "description": "Gestionar citas",
+      "url": "/admin/reservas?source=pwa_shortcut",
+      "icons": [
+        {
+          "src": "/icons/shortcut-calendar.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "short_name": "Analytics",
+      "description": "Ver estadísticas",
+      "url": "/admin/analytics?source=pwa_shortcut",
+      "icons": [
+        {
+          "src": "/icons/shortcut-analytics.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Clientes",
+      "short_name": "Clientes",
+      "description": "Gestionar clientes",
+      "url": "/admin/usuarios?source=pwa_shortcut",
+      "icons": [
+        {
+          "src": "/icons/shortcut-users.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": []
+}

@@ -7,6 +7,7 @@ import { useToast } from '@/components/ui/toast'
 import { useConfirm } from '@/hooks/useConfirm'
 import { createClient } from '@/lib/supabase/client'
 import { getUserBusinesses } from '@/lib/services/admin'
+import { tenantUserSchema } from '@/lib/schemas'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -128,8 +129,8 @@ export default function UsuariosPage() {
   }
 
   const handleAddUser = async () => {
-    if (!business || !newUserEmail) {
-      showError('Por favor ingresa un email válido')
+    if (!business) {
+      showError('No se encontró el negocio')
       return
     }
 
@@ -138,8 +139,16 @@ export default function UsuariosPage() {
       return
     }
 
-    if (newUserRole === 'specialist' && !newUserSpecialtyId) {
-      showError('Por favor selecciona una especialidad para el especialista')
+    // Validar con Zod
+    const validation = tenantUserSchema.safeParse({
+      email: newUserEmail,
+      role: newUserRole,
+      specialtyId: newUserRole === 'specialist' ? newUserSpecialtyId : undefined
+    })
+
+    if (!validation.success) {
+      const firstError = validation.error.errors[0]
+      showError(firstError.message)
       return
     }
 

@@ -6,9 +6,10 @@ import { usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import {
     Power, X, LogOut, ClipboardList, User, Users,
-    Settings, Star, Building2, Menu
+    Settings, Star, Building2, Menu, Calendar, MessageSquare, BarChart3
 } from 'lucide-react'
 import { Logo } from '@/components/shared/Logo'
+import NotificationBell from '@/components/shared/NotificationBell'
 
 export function Sidebar() {
     const pathname = usePathname()
@@ -40,6 +41,21 @@ export function Sidebar() {
                     href: '/admin/especialistas',
                     label: 'Especialistas',
                     icon: Users
+                },
+                {
+                    href: '/admin/disponibilidad',
+                    label: 'Disponibilidad',
+                    icon: Calendar
+                },
+                {
+                    href: '/admin/reviews',
+                    label: 'Reviews',
+                    icon: MessageSquare
+                },
+                {
+                    href: '/admin/analytics',
+                    label: 'Analytics',
+                    icon: BarChart3
                 },
                 {
                     href: '/admin/configuracion',
@@ -79,17 +95,23 @@ export function Sidebar() {
         ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
                 {/* Header */}
-                <div className="flex items-center justify-between mb-10 w-full">
-                    <div className="flex items-center gap-2">
-                        <Logo dark={true} />
-                        <span className="text-xs opacity-50 font-normal mt-1 self-end mb-1 ml-1">Negocio</span>
+                <div className="mb-10 w-full">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <Logo dark={true} />
+                            <span className="text-xs opacity-50 font-normal mt-1 self-end mb-1 ml-1">Negocio</span>
+                        </div>
+                        <button
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="md:hidden text-blue-200"
+                        >
+                            <X size={24} />
+                        </button>
                     </div>
-                    <button
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="md:hidden text-blue-200"
-                    >
-                        <X size={24} />
-                    </button>
+                    {/* Notification Bell */}
+                    <div className="mt-4">
+                        <NotificationBell />
+                    </div>
                 </div>
 
                 {/* Navigation */}

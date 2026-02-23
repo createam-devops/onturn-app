@@ -7,10 +7,11 @@ import { useToast } from '@/components/ui/toast'
 import { useConfirm } from '@/hooks/useConfirm'
 import { createClient } from '@/lib/supabase/client'
 import { getUserBusinesses } from '@/lib/services/admin'
+import { especialistaSchema } from '@/lib/schemas'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { ImageUpload } from '@/components/shared/ImageUpload'
+// import { ImageUpload } from '@/components/shared/ImageUpload' // Disabled - avatar column doesn't exist
 import { Power, Menu, X, LogOut, Plus, Trash2, Edit2, ClipboardList, Star, Users, User, Settings, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 import { getErrorMessage } from '@/lib/utils/errorHandler'
@@ -56,7 +57,7 @@ export default function EspecialistasPage() {
     email: '',
     phone: '',
     specialty_id: '',
-    avatar: '',
+    // avatar: '', // Temporarily disabled - column doesn't exist in Supabase
   })
   const [saving, setSaving] = useState(false)
 
@@ -157,7 +158,7 @@ export default function EspecialistasPage() {
             email: formData.email.trim() || null,
             phone: formData.phone.trim() || null,
             specialty_id: formData.specialty_id || null,
-            avatar: formData.avatar.trim() || null,
+            // avatar: formData.avatar.trim() || null, // Disabled - column doesn't exist
           })
           .eq('id', editingId)
 
@@ -196,7 +197,7 @@ export default function EspecialistasPage() {
             email: formData.email.trim() || null,
             phone: formData.phone.trim() || null,
             specialty_id: formData.specialty_id || null,
-            avatar: formData.avatar.trim() || null,
+            // avatar: formData.avatar.trim() || null, // Disabled - column doesn't exist
             is_active: true,
           })
 
@@ -206,7 +207,7 @@ export default function EspecialistasPage() {
 
       setShowForm(false)
       setEditingId(null)
-      setFormData({ name: '', email: '', phone: '', specialty_id: '', avatar: '' })
+      setFormData({ name: '', email: '', phone: '', specialty_id: '' })
       loadData()
     } catch (error) {
       const errorMessage = getErrorMessage(error, 'SAVE_SPECIALIST')
@@ -224,7 +225,7 @@ export default function EspecialistasPage() {
       email: specialist.email || '',
       phone: specialist.phone || '',
       specialty_id: specialist.specialty_id || '',
-      avatar: specialist.avatar || '',
+      // avatar: specialist.avatar || '', // Disabled
     })
     setShowForm(true)
   }
@@ -365,6 +366,7 @@ export default function EspecialistasPage() {
                     />
                   </div>
                 </div>
+                {/* Avatar field temporarily disabled - column doesn't exist in Supabase
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2">Avatar</label>
                   <ImageUpload
@@ -382,6 +384,7 @@ export default function EspecialistasPage() {
                     compressionType="avatar"
                   />
                 </div>
+                */}
                 <div className="flex gap-3 pt-4 justify-end">
                   <Button variant="ghost" onClick={() => setShowForm(false)}>Cancelar</Button>
                   <Button variant="default" className="bg-[#003366] hover:bg-[#002244]" onClick={handleSave} disabled={saving}>

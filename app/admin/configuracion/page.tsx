@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useToast } from '@/components/ui/toast'
 import { createClient } from '@/lib/supabase/client'
 import { getUserBusinesses } from '@/lib/services/admin'
+import { businessConfigSchema, businessHoursSchema } from '@/lib/schemas'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -130,6 +131,23 @@ export default function ConfiguracionPage() {
 
   const handleSave = async () => {
     if (!business) return
+
+    // Validar datos básicos con Zod
+    const validation = businessConfigSchema.safeParse({
+      name,
+      description: description || undefined,
+      address: address || undefined,
+      city: city || undefined,
+      phone: phone || undefined,
+      email: email || undefined,
+      website: website || undefined
+    })
+
+    if (!validation.success) {
+      const firstError = validation.error.errors[0]
+      showError(firstError.message)
+      return
+    }
 
     try {
       setSaving(true)

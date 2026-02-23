@@ -17,6 +17,7 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { PublicHeader } from '@/components/public/PublicHeader'
+import { reservaSchema } from '@/lib/schemas'
 import type { Business, BusinessHours } from '@/types/business'
 import type { Specialist } from '@/types/specialist'
 
@@ -130,6 +131,23 @@ function ReservarPageContent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!business) return
+
+    // Validar con Zod
+    const validation = reservaSchema.safeParse({
+      customerName: formData.customer_name,
+      customerEmail: formData.customer_email,
+      customerPhone: formData.customer_phone,
+      appointmentDate: formData.appointment_date,
+      appointmentTime: formData.appointment_time,
+      specialistId: formData.specialist_id || undefined,
+      notes: formData.notes || undefined
+    })
+
+    if (!validation.success) {
+      const firstError = validation.error.errors[0]
+      showError(firstError.message)
+      return
+    }
 
     try {
       setSubmitting(true)

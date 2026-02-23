@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { Logo } from '@/components/shared/Logo'
 import { cn } from '@/lib/utils'
 import { UpcomingAppointments } from '@/components/reservas/UpcomingAppointments'
+import NotificationBell from '@/components/shared/NotificationBell'
 
 export function Header() {
   const pathname = usePathname()
@@ -176,6 +177,9 @@ export function Header() {
               // LOGGED IN STATE
               <div className="flex items-center gap-3">
                 {userType === 'customer' && <UpcomingAppointments />}
+                
+                {/* Notificaciones */}
+                <NotificationBell />
 
                 {/* Landing Specific Button: Ofrecer Servicios (Visible even if logged in, unless Business Owner) */}
                 {pathname === '/' && userType !== 'business_owner' && (

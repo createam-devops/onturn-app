@@ -5,7 +5,6 @@ import { useParams, useRouter } from 'next/navigation'
 import { getBusinessBySlug, getBusinessHours } from '@/lib/services/businesses'
 import { getSpecialistsByBusiness } from '@/lib/services/specialists'
 import { getSpecialtiesByBusiness, type Specialty } from '@/lib/services/specialties'
-import { getAvailableSlots } from '@/lib/services/appointments'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,7 +17,10 @@ import { format } from 'date-fns'
 import type { Business, BusinessHours } from '@/types/business'
 import type { Specialist } from '@/types/specialist'
 import { PublicHeader } from '@/components/public/PublicHeader'
+import TimeslotPicker from '@/components/reservas/TimeslotPicker'
 import { Skeleton } from '@/components/ui/skeleton'
+import ReviewList from '@/components/reviews/ReviewList'
+import ReviewModal from '@/components/reviews/ReviewModal'
 
 export default function BusinessDetailPage() {
   const params = useParams()
@@ -31,11 +33,12 @@ export default function BusinessDetailPage() {
   const [specialists, setSpecialists] = useState<Specialist[]>([])
   const [specialties, setSpecialties] = useState<Specialty[]>([])
   const [loading, setLoading] = useState(true)
-  const [slotsLoading, setSlotsLoading] = useState(false)
   const [selectedDateIndex, setSelectedDateIndex] = useState(0)
-  const [availableSlots, setAvailableSlots] = useState<string[]>([])
+  const [selectedTime, setSelectedTime] = useState<string | null>(null)
 
   const [selectedSpecialty, setSelectedSpecialty] = useState<string | null>(null)
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
+  const [reviewListKey, setReviewListKey] = useState(0)
 
   // Generar próximos 14 días
   const nextDays = useMemo(() => {
@@ -61,12 +64,6 @@ export default function BusinessDetailPage() {
       loadBusinessData()
     }
   }, [slug])
-
-  useEffect(() => {
-    if (business && nextDays[selectedDateIndex]) {
-      loadAvailableSlots(nextDays[selectedDateIndex].dateString)
-    }
-  }, [business, selectedDateIndex, nextDays, selectedSpecialty])
 
   const loadBusinessData = async () => {
     try {
@@ -127,6 +124,8 @@ export default function BusinessDetailPage() {
   }
 
   const handleBookSlot = (slot: string) => {
+    if (!business) return
+    
     let specialistParam = ''
     let specialtyParam = ''
 
@@ -144,6 +143,11 @@ export default function BusinessDetailPage() {
       return
     }
     router.push(`/${slug}/reservar?date=${nextDays[selectedDateIndex].dateString}&time=${slot}${specialistParam}${specialtyParam}`)
+  }
+
+  const handleTimeSelect = (time: string) => {
+    setSelectedTime(time)
+    handleBookSlot(time)
   }
 
   const getCurrentHours = () => {
@@ -339,7 +343,10 @@ export default function BusinessDetailPage() {
                 {nextDays.map((day, i) => (
                   <button
                     key={i}
-                    onClick={() => setSelectedDateIndex(i)}
+                    onClick={() => {
+                      setSelectedDateIndex(i)
+                      setSelectedTime(null) // Reset selected time when changing date
+                    }}
                     className={`flex flex-col items-center justify-center min-w-[4.5rem] py-3 rounded-2xl border transition-all duration-300
                       ${selectedDateIndex === i
                         ? 'bg-[#003366] text-white border-[#003366] shadow-lg transform scale-105'
@@ -351,30 +358,15 @@ export default function BusinessDetailPage() {
                 ))}
               </div>
 
-              {/* Grid de Slots */}
-              {slotsLoading ? (
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => (
-                    <Skeleton key={i} className="h-12 rounded-xl" />
-                  ))}
-                </div>
-              ) : availableSlots.length > 0 ? (
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-                  {availableSlots.map((slot, i) => (
-                    <button
-                      key={i}
-                      onClick={() => handleBookSlot(slot)}
-                      className="py-3 px-2 bg-white border-2 border-slate-200 rounded-xl text-slate-600 font-bold hover:border-[#00A896] hover:text-[#00A896] hover:bg-teal-50 transition-all focus:ring-4 focus:ring-[#00A896]/20 focus:outline-none active:scale-95 shadow-sm text-sm md:text-base animate-in fade-in zoom-in duration-300"
-                    >
-                      {slot}
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-slate-500 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-                  <p>No hay horarios disponibles para esta fecha</p>
-                  <p className="text-sm mt-1">Selecciona otra fecha</p>
-                </div>
+              {/* Timeslot Picker Component */}
+              {business && (
+                <TimeslotPicker
+                  businessId={business.id}
+                  specialistId={selectedSpecialty ? specialists.find((s: any) => s.specialty_id === selectedSpecialty)?.id : undefined}
+                  selectedDate={nextDays[selectedDateIndex].dateString}
+                  selectedTime={selectedTime}
+                  onTimeSelect={handleTimeSelect}
+                />
               )}
 
               {!isAuthenticated && (
@@ -435,6 +427,37 @@ export default function BusinessDetailPage() {
             </Card>
           </div>
         </div>
+
+        {/* Sección de Reviews */}
+        <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-2xl font-bold text-[#003366]">
+              Opiniones de Clientes
+            </h3>
+            {isAuthenticated && (
+              <Button
+                onClick={() => setIsReviewModalOpen(true)}
+                variant="primary"
+                size="sm"
+              >
+                Dejar Opinión
+              </Button>
+            )}
+          </div>
+          <ReviewList key={reviewListKey} businessId={business.id} />
+        </div>
+
+        {/* Review Modal */}
+        <ReviewModal
+          businessId={business.id}
+          businessName={business.name}
+          isOpen={isReviewModalOpen}
+          onClose={() => setIsReviewModalOpen(false)}
+          onSuccess={() => {
+            setReviewListKey(prev => prev + 1) // Force refresh
+            setIsReviewModalOpen(false)
+          }}
+        />
       </div>
     </div>
   )

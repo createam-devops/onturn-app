@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { getAllCategories } from '@/lib/services/businesses'
+import { registroNegocioSchema } from '@/lib/schemas'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { User, Mail, Lock, Power, Building2, MapPin, Phone } from 'lucide-react'
@@ -62,34 +63,31 @@ export default function RegistroNegocioPage() {
     setSuccess(false)
     setUserExists(false)
 
+    // Validar con Zod ANTES de cualquier operación
+    const validation = registroNegocioSchema.safeParse({
+      applicantName: fullName,
+      applicantEmail: email,
+      password,
+      businessName,
+      businessDescription: businessDescription || undefined,
+      businessCategoryId: businessCategoryId || undefined,
+      businessAddress,
+      businessCity,
+      businessState,
+      businessPhone,
+      businessEmail: businessEmail || undefined
+    })
+
+    if (!validation.success) {
+      const firstError = validation.error.errors[0]
+      setError(firstError.message)
+      setLoading(false)
+      return
+    }
+
     // Envolver TODO en try-catch super defensivo
     try {
       console.log('[REGISTRO] Iniciando registro...', { email, passwordLength: password.length })
-
-      // Validaciones básicas antes de intentar registro
-      if (!email || !email.includes('@')) {
-        setError('❌ Por favor ingresa un email válido')
-        setLoading(false)
-        return
-      }
-
-      if (password.length < 6) {
-        setError('🔑 La contraseña debe tener al menos 6 caracteres')
-        setLoading(false)
-        return
-      }
-
-      if (!fullName || fullName.trim().length < 3) {
-        setError('👤 Por favor ingresa tu nombre completo')
-        setLoading(false)
-        return
-      }
-
-      if (!businessName || businessName.trim().length < 3) {
-        setError('🏢 Por favor ingresa el nombre de tu negocio')
-        setLoading(false)
-        return
-      }
       
       // 1. Crear usuario en auth (Supabase envía email de confirmación automáticamente)
       let authData, authError
