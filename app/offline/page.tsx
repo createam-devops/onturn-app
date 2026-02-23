@@ -1,3 +1,5 @@
+'use client'
+
 /**
  * OFFLINE PAGE
  * Se muestra cuando no hay conexión a internet
