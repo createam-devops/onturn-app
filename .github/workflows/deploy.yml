@@ -113,7 +113,6 @@ jobs:
             NEXT_PUBLIC_ENABLE_PWA=true
             NEXT_PUBLIC_SITE_URL=https://onturn.app
             NODE_ENV=production
-            PORT=3005
             EOF
             echo "✅ Variables de entorno configuradas"
             
