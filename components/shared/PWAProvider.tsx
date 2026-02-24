@@ -15,24 +15,14 @@ export default function PWAProvider({ children }: { children: React.ReactNode })
   const pwaContext = getPWAContext(pathname)
 
   useEffect(() => {
-    // Registrar Service Worker
-    if (process.env.NODE_ENV === 'production' || process.env.NEXT_PUBLIC_ENABLE_PWA === 'true') {
-      registerServiceWorker()
-    }
+    // Registrar Service Worker solo en rutas de app (no en landing)
+    if (pathname !== '/' && !pathname.startsWith('/[slug]')) {
+      if (process.env.NODE_ENV === 'production' || process.env.NEXT_PUBLIC_ENABLE_PWA === 'true') {
+        registerServiceWorker()
+      }
 
-    // Inicializar prompt de instalación
-    initPWAInstallPrompt()
-
-    // Actualizar manifest link tag dinámicamente
-    const manifestLink = document.querySelector('link[rel="manifest"]')
-    if (manifestLink) {
-      manifestLink.setAttribute('href', getManifestForContext(pwaContext))
-    } else {
-      // Crear link si no existe
-      const link = document.createElement('link')
-      link.rel = 'manifest'
-      link.href = getManifestForContext(pwaContext)
-      document.head.appendChild(link)
+      // Inicializar prompt de instalación
+      initPWAInstallPrompt()
     }
 
     // Actualizar theme-color según contexto
@@ -56,8 +46,9 @@ export default function PWAProvider({ children }: { children: React.ReactNode })
     if (window.matchMedia('(display-mode: standalone)').matches) {
       console.log('[PWA] Running in standalone mode')
       document.body.classList.add('pwa-standalone')
+      document.body.setAttribute('data-pwa-context', pwaContext)
     }
-  }, [pwaContext])
+  }, [pwaContext, pathname])
 
   return (
     <>

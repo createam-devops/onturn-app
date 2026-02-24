@@ -1,21 +1,20 @@
-import { Metadata } from 'next'
+'use client'
 
-export const metadata: Metadata = {
-    title: 'Reservar Turnos, Citas y Servicios Online | OnTurn',
-    description: 'Encuentra peluquerías, dentistas, canchas deportivas y más cerca de ti. Compara horarios, lee reseñas y reserva tu turno al instante con OnTurn.',
-    keywords: ['reservas online', 'turnos', 'citas médicas', 'peluquería', 'barbería', 'canchas', 'padel', 'dentista', 'agenda online'],
-    openGraph: {
-        title: 'Encuentra y Reserva tu próximo turno | OnTurn',
-        description: 'La forma más fácil de agendar citas en tus negocios favoritos.',
-        type: 'website',
-    }
-}
+import { useEffect } from 'react'
 
 export default function ReservasLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
+    // Actualizar manifest para PWA Customer
+    useEffect(() => {
+        const manifestLink = document.querySelector('link[rel="manifest"]') as HTMLLinkElement
+        if (manifestLink) {
+            manifestLink.href = '/manifest-customer.json'
+        }
+    }, [])
+
     return (
         <>
             {children}

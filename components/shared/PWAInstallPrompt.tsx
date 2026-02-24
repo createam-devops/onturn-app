@@ -27,6 +27,22 @@ export default function PWAInstallPrompt({ context }: PWAInstallPromptProps) {
       return
     }
 
+    // NO mostrar en landing page
+    if (pathname === '/' || pathname.startsWith('/[slug]')) {
+      return
+    }
+
+    // Solo mostrar en rutas específicas según contexto
+    const shouldShowInRoute = {
+      'customer': pathname.startsWith('/reservas') || pathname.startsWith('/mis-reservas'),
+      'business': pathname.startsWith('/admin'),
+      'super-admin': pathname.startsWith('/super-admin'),
+    }[pwaContext]
+
+    if (!shouldShowInRoute) {
+      return
+    }
+
     // Escuchar evento de disponibilidad
     const handleInstallAvailable = () => {
       // Esperar 5 segundos antes de mostrar
@@ -44,7 +60,7 @@ export default function PWAInstallPrompt({ context }: PWAInstallPromptProps) {
 
     // Verificar si ya está disponible
     setTimeout(() => {
-      if (!isPWAInstalled() && !sessionStorage.getItem('pwa-prompt-dismissed')) {
+      if (!isPWAInstalled() && !sessionStorage.getItem(`pwa-prompt-dismissed-${pwaContext}`)) {
         setShowPrompt(true)
       }
     }, 10000)
@@ -53,7 +69,7 @@ export default function PWAInstallPrompt({ context }: PWAInstallPromptProps) {
       window.removeEventListener('pwa-install-available', handleInstallAvailable)
       window.removeEventListener('pwa-installed', handleInstalled)
     }
-  }, [])
+  }, [pathname, pwaContext])
 
   const handleInstall = async () => {
     setIsInstalling(true)
@@ -74,7 +90,7 @@ export default function PWAInstallPrompt({ context }: PWAInstallPromptProps) {
 
   const handleDismiss = () => {
     setShowPrompt(false)
-    sessionStorage.setItem('pwa-prompt-dismissed', 'true')
+    sessionStorage.setItem(`pwa-prompt-dismissed-${pwaContext}`, 'true')
   }
 
   if (!showPrompt) return null

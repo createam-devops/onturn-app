@@ -87,3 +87,40 @@ input[type="button"],
 label {
   cursor: pointer;
 }
+
+/* PWA STANDALONE MODE STYLES */
+/* Cuando la app está instalada como PWA, ocultar elementos de navegación web */
+.pwa-standalone {
+  /* Adicionar estilos específicos para PWA standalone si es necesario */
+}
+
+/* Ocultar scrollbar en modo standalone para mejor UX de app nativa */
+@media (display-mode: standalone) {
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* ANIMACION WIGGLE */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-15deg); }
+  75% { transform: rotate(15deg); }
+}
+
+.animate-wiggle {
+  animation: wiggle 1s ease-in-out infinite;
+}

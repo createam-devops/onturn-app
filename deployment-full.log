@@ -1,0 +1,329 @@
+﻿Deploy to VPS	Set up job	´╗┐2026-02-24T00:14:17.2653315Z Current runner version: '2.331.0'
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2678665Z ##[group]Runner Image Provisioner
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2679793Z Hosted Compute Agent
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2680451Z Version: 20260123.484
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2681556Z Commit: 6bd6555ca37d84114959e1c76d2c01448ff61c5d
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2682393Z Build Date: 2026-01-23T19:41:17Z
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2683239Z Worker ID: {c1dd9290-612b-49b2-9267-b1a974504220}
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2684074Z Azure Region: westus3
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2684756Z ##[endgroup]
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2686372Z ##[group]Operating System
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2687073Z Ubuntu
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2687775Z 24.04.3
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2688342Z LTS
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2688997Z ##[endgroup]
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2689637Z ##[group]Runner Image
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2690925Z Image: ubuntu-24.04
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2691631Z Version: 20260201.15.1
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2692824Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260201.15/images/ubuntu/Ubuntu2404-Readme.md
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2694715Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260201.15
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2695905Z ##[endgroup]
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2697221Z ##[group]GITHUB_TOKEN Permissions
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2699458Z Contents: read
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2700228Z Metadata: read
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2701047Z Packages: read
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2701683Z ##[endgroup]
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2704020Z Secret source: Actions
+Deploy to VPS	Set up job	2026-02-24T00:14:17.2704848Z Prepare workflow directory
+Deploy to VPS	Set up job	2026-02-24T00:14:17.3033710Z Prepare all required actions
+Deploy to VPS	Set up job	2026-02-24T00:14:17.3072969Z Getting action download info
+Deploy to VPS	Set up job	2026-02-24T00:14:17.6791637Z Download action repository 'appleboy/ssh-action@v1.0.0' (SHA:55dabf81b49d4120609345970c91507e2d734799)
+Deploy to VPS	Set up job	2026-02-24T00:14:18.5770522Z Complete job name: Deploy to VPS
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	´╗┐2026-02-24T00:14:18.6315295Z ##[group]Build container for action use: '/home/runner/work/_actions/appleboy/ssh-action/v1.0.0/Dockerfile'.
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:18.6371478Z ##[command]/usr/bin/docker build -t a8cf8a:880767306dcf44d4a19a4364161d6f50 -f "/home/runner/work/_actions/appleboy/ssh-action/v1.0.0/Dockerfile" "/home/runner/work/_actions/appleboy/ssh-action/v1.0.0"
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:19.2560205Z #0 building with "default" instance using docker driver
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:19.2560720Z 
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:19.2561282Z #1 [internal] load build definition from Dockerfile
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:19.2561865Z #1 transferring dockerfile: 170B done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:19.2562333Z #1 DONE 0.0s
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:19.2562535Z 
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:19.2562862Z #2 [internal] load metadata for ghcr.io/appleboy/drone-ssh:1.7.0
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:19.8925277Z #2 DONE 0.8s
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0088388Z 
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0089145Z #3 [internal] load .dockerignore
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0090005Z #3 transferring context: 2B done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0090613Z #3 DONE 0.0s
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0091209Z 
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0091445Z #4 [internal] load build context
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0091898Z #4 transferring context: 108B done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0092275Z #4 DONE 0.0s
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0092473Z 
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0092936Z #5 [1/3] FROM ghcr.io/appleboy/drone-ssh:1.7.0@sha256:6818eede35495f9b993ba086350a53c29c9cfc935ef4f93b84a6c2e34e5dd100
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0093931Z #5 resolve ghcr.io/appleboy/drone-ssh:1.7.0@sha256:6818eede35495f9b993ba086350a53c29c9cfc935ef4f93b84a6c2e34e5dd100 done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0094786Z #5 sha256:6818eede35495f9b993ba086350a53c29c9cfc935ef4f93b84a6c2e34e5dd100 2.38kB / 2.38kB done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0095526Z #5 sha256:7896ba2bf31bc811100ebe17c066ec4ebb20f14e44c438e51b842f14cce72205 864B / 864B done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0096275Z #5 sha256:178867ded3677e49c9fd3174feefe428b856f9c4fd4c9fe4a9588fc80c4d7614 3.34kB / 3.34kB done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0097034Z #5 sha256:4db1b89c0bd13344176ddce2d093b9da2ae58336823ffed2009a7ea4b62d2a95 0B / 3.37MB 0.1s
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0097788Z #5 sha256:6bd0ff5b8ea528bad73a47e6171c4d7dc3b49d4310fcf759bb62ea5796e4c0c0 0B / 284.84kB 0.1s
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.0098522Z #5 sha256:ef68d9ebed59d010ecedd79627d501152d7a932c8a32685fbec143370961699e 0B / 2.42MB 0.1s
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.1357162Z #5 sha256:4db1b89c0bd13344176ddce2d093b9da2ae58336823ffed2009a7ea4b62d2a95 3.37MB / 3.37MB 0.2s done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.1358673Z #5 sha256:6bd0ff5b8ea528bad73a47e6171c4d7dc3b49d4310fcf759bb62ea5796e4c0c0 284.84kB / 284.84kB 0.2s done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.1359533Z #5 extracting sha256:4db1b89c0bd13344176ddce2d093b9da2ae58336823ffed2009a7ea4b62d2a95 0.1s done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.3744533Z #5 sha256:ef68d9ebed59d010ecedd79627d501152d7a932c8a32685fbec143370961699e 2.42MB / 2.42MB 0.2s done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:20.3747594Z #5 extracting sha256:6bd0ff5b8ea528bad73a47e6171c4d7dc3b49d4310fcf759bb62ea5796e4c0c0 0.0s done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:21.2738156Z #5 extracting sha256:ef68d9ebed59d010ecedd79627d501152d7a932c8a32685fbec143370961699e
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:21.4669856Z #5 extracting sha256:ef68d9ebed59d010ecedd79627d501152d7a932c8a32685fbec143370961699e 0.0s done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:21.4672617Z #5 DONE 1.4s
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:21.4672914Z 
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:21.4673117Z #6 [2/3] COPY entrypoint.sh /entrypoint.sh
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:21.4673699Z #6 DONE 0.0s
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:21.4673953Z 
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:21.4674141Z #7 [3/3] RUN chmod +x /entrypoint.sh
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:21.4674667Z #7 DONE 0.1s
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:21.6194004Z 
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:21.6194447Z #8 exporting to image
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:21.6194864Z #8 exporting layers
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:22.0069663Z #8 exporting layers 0.5s done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:22.0249917Z #8 writing image sha256:2d98b3e048b01841333f723c97ecc628cbfab0efd96ad54e3e0f6a8c0afd7a53 done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:22.0251278Z #8 naming to docker.io/library/a8cf8a:880767306dcf44d4a19a4364161d6f50 done
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:22.0252018Z #8 DONE 0.5s
+Deploy to VPS	Build appleboy/ssh-action@v1.0.0	2026-02-24T00:14:22.0332789Z ##[endgroup]
+Deploy to VPS	Deploy to VPS via SSH	´╗┐2026-02-24T00:14:22.0635312Z ##[group]Run appleboy/ssh-action@v1.0.0
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.0635948Z with:
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.0636289Z   host: ***
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.0636508Z   username: ***
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.0638314Z   key: ***
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.0638523Z   port: 22
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.0646257Z   script: echo "­ƒÜÇ Iniciando deployment de OnTurn..."
+Deploy to VPS	Deploy to VPS via SSH	
+Deploy to VPS	Deploy to VPS via SSH	# Crear directorio si no existe y clonar repositorio
+Deploy to VPS	Deploy to VPS via SSH	if [ ! -d "/var/www/onturn-app" ]; then
+Deploy to VPS	Deploy to VPS via SSH	  echo "­ƒôü Creando directorio del proyecto..."
+Deploy to VPS	Deploy to VPS via SSH	  mkdir -p /var/www
+Deploy to VPS	Deploy to VPS via SSH	  cd /var/www
+Deploy to VPS	Deploy to VPS via SSH	  git clone https://github.com/createam-devops/onturn-app.git
+Deploy to VPS	Deploy to VPS via SSH	  cd onturn-app
+Deploy to VPS	Deploy to VPS via SSH	else
+Deploy to VPS	Deploy to VPS via SSH	  echo "­ƒôé Directorio existe, actualizando c├│digo..."
+Deploy to VPS	Deploy to VPS via SSH	  cd /var/www/onturn-app
+Deploy to VPS	Deploy to VPS via SSH	  git fetch origin
+Deploy to VPS	Deploy to VPS via SSH	  git reset --hard origin/main
+Deploy to VPS	Deploy to VPS via SSH	fi
+Deploy to VPS	Deploy to VPS via SSH	echo "Ô£à C├│digo actualizado"
+Deploy to VPS	Deploy to VPS via SSH	
+Deploy to VPS	Deploy to VPS via SSH	# Crear/actualizar archivo .env
+Deploy to VPS	Deploy to VPS via SSH	cat > .env << 'EOF'
+Deploy to VPS	Deploy to VPS via SSH	# Supabase
+Deploy to VPS	Deploy to VPS via SSH	NEXT_PUBLIC_SUPABASE_URL=***
+Deploy to VPS	Deploy to VPS via SSH	NEXT_PUBLIC_SUPABASE_ANON_KEY=***
+Deploy to VPS	Deploy to VPS via SSH	
+Deploy to VPS	Deploy to VPS via SSH	# VAPID Keys
+Deploy to VPS	Deploy to VPS via SSH	NEXT_PUBLIC_VAPID_PUBLIC_KEY=***
+Deploy to VPS	Deploy to VPS via SSH	VAPID_PRIVATE_KEY=***
+Deploy to VPS	Deploy to VPS via SSH	
+Deploy to VPS	Deploy to VPS via SSH	# PWA
+Deploy to VPS	Deploy to VPS via SSH	NEXT_PUBLIC_ENABLE_PWA=true
+Deploy to VPS	Deploy to VPS via SSH	NEXT_PUBLIC_SITE_URL=https://onturn.app
+Deploy to VPS	Deploy to VPS via SSH	
+Deploy to VPS	Deploy to VPS via SSH	# Production
+Deploy to VPS	Deploy to VPS via SSH	NODE_ENV=production
+Deploy to VPS	Deploy to VPS via SSH	PORT=3000
+Deploy to VPS	Deploy to VPS via SSH	EOF
+Deploy to VPS	Deploy to VPS via SSH	echo "Ô£à Variables de entorno configuradas"
+Deploy to VPS	Deploy to VPS via SSH	
+Deploy to VPS	Deploy to VPS via SSH	# Detener contenedores anteriores
+Deploy to VPS	Deploy to VPS via SSH	docker-compose down 2>/dev/null || true
+Deploy to VPS	Deploy to VPS via SSH	echo "Ô£à Contenedores anteriores detenidos"
+Deploy to VPS	Deploy to VPS via SSH	
+Deploy to VPS	Deploy to VPS via SSH	# Limpiar im├ígenes antiguas
+Deploy to VPS	Deploy to VPS via SSH	docker image prune -af --filter "until=24h" || true
+Deploy to VPS	Deploy to VPS via SSH	echo "Ô£à Im├ígenes antiguas eliminadas"
+Deploy to VPS	Deploy to VPS via SSH	
+Deploy to VPS	Deploy to VPS via SSH	# Construir y levantar contenedores
+Deploy to VPS	Deploy to VPS via SSH	docker-compose up -d --build
+Deploy to VPS	Deploy to VPS via SSH	echo "Ô£à Contenedores construidos e iniciados"
+Deploy to VPS	Deploy to VPS via SSH	
+Deploy to VPS	Deploy to VPS via SSH	# Esperar que la aplicaci├│n est├® lista
+Deploy to VPS	Deploy to VPS via SSH	echo "ÔÅ│ Esperando que la aplicaci├│n est├® lista..."
+Deploy to VPS	Deploy to VPS via SSH	sleep 20
+Deploy to VPS	Deploy to VPS via SSH	
+Deploy to VPS	Deploy to VPS via SSH	# Verificar que el contenedor est├í corriendo
+Deploy to VPS	Deploy to VPS via SSH	if [ "$(docker-compose ps -q onturn-app)" ]; then
+Deploy to VPS	Deploy to VPS via SSH	  if [ "$(docker ps -q -f name=onturn-app)" ]; then
+Deploy to VPS	Deploy to VPS via SSH	    echo "Ô£à Contenedor onturn-app est├í corriendo"
+Deploy to VPS	Deploy to VPS via SSH	    docker-compose ps
+Deploy to VPS	Deploy to VPS via SSH	  else
+Deploy to VPS	Deploy to VPS via SSH	    echo "ÔØî Error: Contenedor no est├í corriendo"
+Deploy to VPS	Deploy to VPS via SSH	    docker-compose logs --tail 50
+Deploy to VPS	Deploy to VPS via SSH	    exit 1
+Deploy to VPS	Deploy to VPS via SSH	  fi
+Deploy to VPS	Deploy to VPS via SSH	else
+Deploy to VPS	Deploy to VPS via SSH	  echo "ÔØî Error: Contenedor no existe"
+Deploy to VPS	Deploy to VPS via SSH	  docker-compose logs --tail 50
+Deploy to VPS	Deploy to VPS via SSH	  exit 1
+Deploy to VPS	Deploy to VPS via SSH	fi
+Deploy to VPS	Deploy to VPS via SSH	
+Deploy to VPS	Deploy to VPS via SSH	echo ""
+Deploy to VPS	Deploy to VPS via SSH	echo "­ƒÄë Deployment completado exitosamente!"
+Deploy to VPS	Deploy to VPS via SSH	
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.0652410Z   timeout: 30s
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.0652640Z   command_timeout: 10m
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.0652871Z   proxy_port: 22
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.0653098Z   proxy_timeout: 30s
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.0653603Z ##[endgroup]
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.0784820Z ##[command]/usr/bin/docker run --name a8cf8a880767306dcf44d4a19a4364161d6f50_13a0a0 --label a8cf8a --workdir /github/workspace --rm -e "INPUT_HOST" -e "INPUT_USERNAME" -e "INPUT_KEY" -e "INPUT_PORT" -e "INPUT_SCRIPT" -e "INPUT_PASSPHRASE" -e "INPUT_PASSWORD" -e "INPUT_SYNC" -e "INPUT_USE_INSECURE_CIPHER" -e "INPUT_CIPHER" -e "INPUT_TIMEOUT" -e "INPUT_COMMAND_TIMEOUT" -e "INPUT_KEY_PATH" -e "INPUT_FINGERPRINT" -e "INPUT_PROXY_HOST" -e "INPUT_PROXY_PORT" -e "INPUT_PROXY_USERNAME" -e "INPUT_PROXY_PASSWORD" -e "INPUT_PROXY_PASSPHRASE" -e "INPUT_PROXY_TIMEOUT" -e "INPUT_PROXY_KEY" -e "INPUT_PROXY_KEY_PATH" -e "INPUT_PROXY_FINGERPRINT" -e "INPUT_PROXY_CIPHER" -e "INPUT_PROXY_USE_INSECURE_CIPHER" -e "INPUT_SCRIPT_STOP" -e "INPUT_ENVS" -e "INPUT_ENVS_FORMAT" -e "INPUT_DEBUG" -e "INPUT_ALLENVS" -e "HOME" -e "GITHUB_JOB" -e "GITHUB_REF" -e "GITHUB_SHA" -e "GITHUB_REPOSITORY" -e "GITHUB_REPOSITORY_OWNER" -e "GITHUB_REPOSITORY_OWNER_ID" -e "GITHUB_RUN_ID" -e "GITHUB_RUN_NUMBER" -e "GITHUB_RETENTION_DAYS" -e "GITHUB_RUN_ATTEMPT" -e "GITHUB_ACTOR_ID" -e "GITHUB_ACTOR" -e "GITHUB_WORKFLOW" -e "GITHUB_HEAD_REF" -e "GITHUB_BASE_REF" -e "GITHUB_EVENT_NAME" -e "GITHUB_SERVER_URL" -e "GITHUB_API_URL" -e "GITHUB_GRAPHQL_URL" -e "GITHUB_REF_NAME" -e "GITHUB_REF_PROTECTED" -e "GITHUB_REF_TYPE" -e "GITHUB_WORKFLOW_REF" -e "GITHUB_WORKFLOW_SHA" -e "GITHUB_REPOSITORY_ID" -e "GITHUB_TRIGGERING_ACTOR" -e "GITHUB_WORKSPACE" -e "GITHUB_ACTION" -e "GITHUB_EVENT_PATH" -e "GITHUB_ACTION_REPOSITORY" -e "GITHUB_ACTION_REF" -e "GITHUB_PATH" -e "GITHUB_ENV" -e "GITHUB_STEP_SUMMARY" -e "GITHUB_STATE" -e "GITHUB_OUTPUT" -e "RUNNER_OS" -e "RUNNER_ARCH" -e "RUNNER_NAME" -e "RUNNER_ENVIRONMENT" -e "RUNNER_TOOL_CACHE" -e "RUNNER_TEMP" -e "RUNNER_WORKSPACE" -e "ACTIONS_RUNTIME_URL" -e "ACTIONS_RUNTIME_TOKEN" -e "ACTIONS_CACHE_URL" -e "ACTIONS_RESULTS_URL" -e "ACTIONS_ORCHESTRATION_ID" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp":"/github/runner_temp" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/onturn-app/onturn-app":"/github/workspace" a8cf8a:880767306dcf44d4a19a4364161d6f50
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2493383Z ======CMD======
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2585024Z echo "­ƒÜÇ Iniciando deployment de OnTurn..."
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2585359Z 
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2585578Z # Crear directorio si no existe y clonar repositorio
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2585956Z if [ ! -d "/var/www/onturn-app" ]; then
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2586346Z   echo "­ƒôü Creando directorio del proyecto..."
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2586663Z   mkdir -p /var/www
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2586907Z   cd /var/www
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2587249Z   git clone https://github.com/createam-devops/onturn-app.git
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2587660Z   cd onturn-app
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2587864Z else
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2588222Z   echo "­ƒôé Directorio existe, actualizando c├│digo..."
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2588584Z   cd /var/www/onturn-app
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2589046Z   git fetch origin
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2589291Z   git reset --hard origin/main
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2589533Z fi
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2589779Z echo "Ô£à C├│digo actualizado"
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2589945Z 
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2590054Z # Crear/actualizar archivo .env
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2590308Z cat > .env << 'EOF'
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2590535Z # Supabase
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2591130Z NEXT_PUBLIC_SUPABASE_URL=***
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2592559Z NEXT_PUBLIC_SUPABASE_ANON_KEY=***
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2592765Z 
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2592859Z # VAPID Keys
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2593414Z NEXT_PUBLIC_VAPID_PUBLIC_KEY=***
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2593800Z VAPID_PRIVATE_KEY=***
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2593951Z 
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2594043Z # PWA
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2594268Z NEXT_PUBLIC_ENABLE_PWA=true
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2594557Z NEXT_PUBLIC_SITE_URL=https://onturn.app
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2594764Z 
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2594857Z # Production
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2595080Z NODE_ENV=production
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2595298Z PORT=3000
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2595775Z EOF
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2596049Z echo "Ô£à Variables de entorno configuradas"
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2596269Z 
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2596382Z # Detener contenedores anteriores
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2596695Z docker-compose down 2>/dev/null || true
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2597109Z echo "Ô£à Contenedores anteriores detenidos"
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2597319Z 
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2597459Z # Limpiar im├ígenes antiguas
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2597773Z docker image prune -af --filter "until=24h" || true
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2598151Z echo "Ô£à Im├ígenes antiguas eliminadas"
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2598344Z 
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2598456Z # Construir y levantar contenedores
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2598742Z docker-compose up -d --build
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2599075Z echo "Ô£à Contenedores construidos e iniciados"
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2599306Z 
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2599457Z # Esperar que la aplicaci├│n est├® lista
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2599843Z echo "ÔÅ│ Esperando que la aplicaci├│n est├® lista..."
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2600159Z sleep 20
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2600283Z 
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2600449Z # Verificar que el contenedor est├í corriendo
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2600935Z if [ "$(docker-compose ps -q onturn-app)" ]; then
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2601304Z   if [ "$(docker ps -q -f name=onturn-app)" ]; then
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2601699Z     echo "Ô£à Contenedor onturn-app est├í corriendo"
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2602019Z     docker-compose ps
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2602248Z   else
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2602526Z     echo "ÔØî Error: Contenedor no est├í corriendo"
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2602844Z     docker-compose logs --tail 50
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2603108Z     exit 1
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2603295Z   fi
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2603480Z else
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2603715Z   echo "ÔØî Error: Contenedor no existe"
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2604222Z   docker-compose logs --tail 50
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2604477Z   exit 1
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2604668Z fi
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2604776Z 
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2604861Z echo ""
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2605142Z echo "­ƒÄë Deployment completado exitosamente!"
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2605381Z 
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:22.2605472Z ======END======
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:26.6896459Z out: ­ƒÜÇ Iniciando deployment de OnTurn...
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:14:26.6897220Z out: ­ƒôé Directorio existe, actualizando c├│digo...
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:15:09.6440668Z err: Updating files: 100% (3/3)
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:15:09.6441493Z Updating files: 100% (3/3), done.
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:15:11.5502342Z out: HEAD is now at c97445d Fix: NEXT_PUBLIC_SITE_URL opcional sin validaci├│n estricta
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:15:11.5696660Z out: Ô£à C├│digo actualizado
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:15:12.1535553Z out: Ô£à Variables de entorno configuradas
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:20:08.5341514Z out: Ô£à Contenedores anteriores detenidos
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:20:52.2830665Z out: Deleted Images:
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:20:52.2831706Z out: untagged: onturn-app-app:latest
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:20:52.2832914Z out: deleted: sha256:88c14f6f5fedffb3741a1340afb0a4d05ea5a8298a70749dc07937507c2b3b27
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:20:52.2834031Z out: deleted: sha256:de6b4d1847a6c6ced313b096911f61a43ef576f0df3008b62fb3efeaa4382ae4
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:20:52.2834897Z out: deleted: sha256:4aec82f60fcf150d57ea1a7e12adde910d71e6174bd5f1c9c1280ca86a3e3126
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:20:52.2835589Z out: untagged: cyberpos-auth-service:latest
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:20:52.2836243Z out: deleted: sha256:b1082daf7662277aef151c7ce5388dcaa3cd8f85338482f188a9a043c8aecad0
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:20:52.2837090Z out: deleted: sha256:d5ec9303e8ca8685122594ccb99de57fcc9a30e5270898aa7ae5d5a221484cdf
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:20:52.2837923Z out: deleted: sha256:7e6e6cef1f85e71ffab1f93dd0d8415ce7f9091aeb68520d38286d2775c39bd6
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:20:52.2838566Z out: Total reclaimed space: 21.2kB
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:20:52.2889604Z out: Ô£à Im├ígenes antiguas eliminadas
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:21:21.2886069Z err:  Image onturn-app-app Building 
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:21:27.0723404Z out: #1 [internal] load local bake definitions
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:21:27.2420505Z out: #1 reading from stdin 895B 0.1s done
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:21:27.2422208Z out: #1 DONE 0.1s
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:21:37.6780622Z out: #2 [internal] load build definition from Dockerfile
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:21:37.6841235Z out: #2 DONE 0.0s
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:21:38.3917873Z out: #2 [internal] load build definition from Dockerfile
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:21:39.1249940Z out: #2 transferring dockerfile:
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:21:41.8507264Z out: #2 transferring dockerfile: 1.88kB 2.5s done
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:21:43.6644964Z out: #2 DONE 5.3s
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:21:46.0993970Z out: #3 [internal] load metadata for docker.io/library/node:20-alpine
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:21:51.8038707Z out: #3 ...
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:21:51.8039266Z out: #4 [auth] library/node:pull token for registry-1.docker.io
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:21:52.0978187Z out: #4 DONE 0.0s
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:21:52.1488109Z out: #3 [internal] load metadata for docker.io/library/node:20-alpine
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:03.1427240Z out: #3 DONE 17.1s
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:03.3475347Z out: #5 [internal] load .dockerignore
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:04.8073390Z out: #5 transferring context:
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:04.9288456Z out: #5 transferring context: 578B 0.0s done
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:07.3907545Z out: #5 DONE 4.2s
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:08.7178705Z out: #6 [internal] load build context
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:08.7186353Z out: #6 DONE 0.0s
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:08.7192167Z out: #7 [base 1/1] FROM docker.io/library/node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec71132750ec8
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:09.5529708Z out: #7 resolve docker.io/library/node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec71132750ec8
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:13.6026290Z out: #7 resolve docker.io/library/node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec71132750ec8 4.2s done
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:13.7536508Z out: #7 DONE 5.0s
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:14.6676743Z out: #6 [internal] load build context
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:14.8459241Z out: #6 transferring context:
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:19.8437579Z out: #6 transferring context: 29.61kB 5.1s
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:20.6339024Z out: #6 transferring context: 30.68kB 5.7s done
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:24.6842730Z out: #6 DONE 10.0s
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:26.6981748Z out: #8 [builder 2/4] COPY --from=deps /app/node_modules ./node_modules
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:26.6982456Z out: #8 CACHED
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:26.6982853Z out: #9 [deps 1/3] WORKDIR /app
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:26.6983257Z out: #9 CACHED
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:26.6983731Z out: #10 [deps 2/3] COPY package.json package-lock.json* ./
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:26.6984201Z out: #10 CACHED
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:26.6984478Z out: #11 [deps 3/3] RUN npm ci
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:26.6984800Z out: #11 CACHED
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:26.6985074Z out: #12 [builder 3/4] COPY . .
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:26.6987435Z out: #12 CACHED
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:22:26.6987769Z out: #13 [builder 4/4] RUN npm run build
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:24:06.5987577Z out: #13 99.91 
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:24:06.5989631Z out: #13 99.91 > onturn-app@0.1.0 build
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:24:06.5990016Z out: #13 99.91 > next build
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:24:06.5990312Z out: #13 99.91 
+Deploy to VPS	Deploy to VPS via SSH	2026-02-24T00:24:26.6939403Z 2026/02/24 00:24:26 Run Command Timeout
+Deploy to VPS	Deployment summary	´╗┐2026-02-24T00:24:26.7945126Z ##[group]Run echo "­ƒôï Resumen del Deployment"
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.7945563Z [36;1mecho "­ƒôï Resumen del Deployment"[0m
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.7945873Z [36;1mecho "========================"[0m
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.7946185Z [36;1mecho "Estado: failure"[0m
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.7946439Z [36;1mecho "Rama: main"[0m
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.7946794Z [36;1mecho "Commit: 8253d3d62bd9a706a3b11f7eca33ec95b185837b"[0m
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.7947166Z [36;1mecho "Autor: eltimoteyo"[0m
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.7947438Z [36;1mecho "========================"[0m
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.7947700Z [36;1m[0m
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.7947920Z [36;1mif [ "failure" == "success" ]; then[0m
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.7948292Z [36;1m  echo "Ô£à Deployment exitoso a https://onturn.app"[0m
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.7948634Z [36;1melse[0m
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.7948900Z [36;1m  echo "ÔØî Deployment fall├│ - revisar logs"[0m
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.7949205Z [36;1mfi[0m
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.7985797Z shell: /usr/bin/bash -e {0}
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.7986093Z ##[endgroup]
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.8072193Z ­ƒôï Resumen del Deployment
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.8072748Z ========================
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.8073056Z Estado: failure
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.8073268Z Rama: main
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.8073980Z Commit: 8253d3d62bd9a706a3b11f7eca33ec95b185837b
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.8074693Z Autor: eltimoteyo
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.8075062Z ========================
+Deploy to VPS	Deployment summary	2026-02-24T00:24:26.8075599Z ÔØî Deployment fall├│ - revisar logs
+Deploy to VPS	Complete job	´╗┐2026-02-24T00:24:26.8124672Z Cleaning up orphan processes

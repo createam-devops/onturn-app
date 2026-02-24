@@ -16,6 +16,18 @@ export function Header() {
   const router = useRouter()
   const { user, userType, isAuthenticated, logout } = useAuth()
   const [scrolled, setScrolled] = useState(false)
+  const [isStandalone, setIsStandalone] = useState(false)
+
+  // Detect PWA standalone mode
+  useEffect(() => {
+    const checkStandalone = () => {
+      const standalone = window.matchMedia('(display-mode: standalone)').matches ||
+        (window.navigator as any).standalone ||
+        document.referrer.includes('android-app://')
+      setIsStandalone(standalone)
+    }
+    checkStandalone()
+  }, [])
 
   // Handle scroll effect for transparent header
   useEffect(() => {
@@ -129,9 +141,16 @@ export function Header() {
               </button>
             )}
 
-            <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
-              <Logo dark={logoDark} />
-            </Link>
+            {/* Logo - No clickable en PWA standalone, solo mostrar branding */}
+            {isStandalone ? (
+              <div className="flex items-center">
+                <Logo dark={logoDark} />
+              </div>
+            ) : (
+              <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
+                <Logo dark={logoDark} />
+              </Link>
+            )}
           </div>
 
           {/* CENTER SECTION: Search Bar */}
@@ -181,8 +200,8 @@ export function Header() {
                 {/* Notificaciones */}
                 <NotificationBell />
 
-                {/* Landing Specific Button: Ofrecer Servicios (Visible even if logged in, unless Business Owner) */}
-                {pathname === '/' && userType !== 'business_owner' && (
+                {/* Landing Specific Button: Ofrecer Servicios (NO en PWA standalone) */}
+                {pathname === '/' && userType !== 'business_owner' && !isStandalone && (
                   <Link href="/registro-negocio">
                     <Button variant="default" className="rounded-full shadow-md hover:shadow-lg transition-all gap-2 bg-[#00A896] hover:bg-[#008f80] text-white border-transparent px-4 mr-2">
                       <Briefcase size={18} />
@@ -284,8 +303,8 @@ export function Header() {
             ) : (
               // NOT LOGGED IN STATE
               <div className="flex items-center gap-3">
-                {/* Landing Specific Button: Ofrecer Servicios */}
-                {pathname === '/' && (
+                {/* Landing Specific Button: Ofrecer Servicios (NO en PWA standalone) */}
+                {pathname === '/' && !isStandalone && (
                   <Link href="/registro-negocio">
                     <Button variant="default" className="rounded-full shadow-md hover:shadow-lg transition-all gap-2 bg-[#00A896] hover:bg-[#008f80] text-white border-transparent px-4 mr-2">
                       <Briefcase size={18} />
