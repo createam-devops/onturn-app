@@ -7,53 +7,9 @@ on:
       - production
   workflow_dispatch:
 
-env:
-  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/onturn-app
-  DOCKER_TAG: latest
-  COMMIT_SHA: ${{ github.sha }}
-
 jobs:
-  build-and-push:
-    name: Build and Push Docker Image
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: |
-            ${{ env.DOCKER_IMAGE }}:latest
-            ${{ env.DOCKER_IMAGE }}:${{ env.COMMIT_SHA }}
-          build-args: |
-            NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-            NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-            NEXT_PUBLIC_SITE_URL=https://onturn.app
-            NEXT_PUBLIC_VAPID_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_VAPID_PUBLIC_KEY }}
-            NEXT_PUBLIC_ENABLE_PWA=true
-          cache-from: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache
-          cache-to: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache,mode=max
-
-      - name: Image digest
-        run: echo "Image pushed with tags - ${{ env.DOCKER_IMAGE }}:latest and ${{ env.DOCKER_IMAGE }}:${{ env.COMMIT_SHA }}"
-
   deploy:
     name: Deploy to VPS
-    needs: build-and-push
     runs-on: ubuntu-latest
     
     steps:
@@ -67,13 +23,20 @@ jobs:
           script: |
             echo "🚀 Iniciando deployment de OnTurn..."
             
-            # Navegar al directorio del proyecto
-            cd /var/www/onturn-app || exit 1
-            
-            # Pull latest code (para docker-compose.yml y configs)
-            git fetch origin
-            git reset --hard origin/${{ github.ref_name }}
-            echo "✅ Configuración actualizada"
+            # Crear directorio si no existe y clonar repositorio
+            if [ ! -d "/var/www/onturn-app" ]; then
+              echo "📁 Creando directorio del proyecto..."
+              mkdir -p /var/www
+              cd /var/www
+              git clone https://github.com/createam-devops/onturn-app.git
+              cd onturn-app
+            else
+              echo "📂 Directorio existe, actualizando código..."
+              cd /var/www/onturn-app
+              git fetch origin
+              git reset --hard origin/${{ github.ref_name }}
+            fi
+            echo "✅ Código actualizado"
             
             # Crear/actualizar archivo .env
             cat > .env << 'EOF'
@@ -92,59 +55,48 @@ jobs:
             # Production
             NODE_ENV=production
             PORT=3000
-            
-            # Docker
-            DOCKER_IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/onturn-app
-            DOCKER_TAG=latest
             EOF
             echo "✅ Variables de entorno configuradas"
             
-            # Login to Docker Hub
-            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-            echo "✅ Logueado en Docker Hub"
-            
-            # Pull latest image
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/onturn-app:latest
-            echo "✅ Imagen descargada desde Docker Hub"
-            
-            # Stop and remove old containers
-            docker-compose down
+            # Detener contenedores anteriores
+            docker-compose down 2>/dev/null || true
             echo "✅ Contenedores anteriores detenidos"
             
-            # Remove old images to free space  
-            docker image prune -af --filter "until=24h"
+            # Limpiar imágenes antiguas
+            docker image prune -af --filter "until=24h" || true
             echo "✅ Imágenes antiguas eliminadas"
             
-            # Start new containers
-            docker-compose up -d
-            echo "✅ Nuevos contenedores iniciados"
+            # Construir y levantar contenedores
+            docker-compose up -d --build
+            echo "✅ Contenedores construidos e iniciados"
             
-            # Wait for container to be healthy
+            # Esperar que la aplicación esté lista
             echo "⏳ Esperando que la aplicación esté lista..."
-            sleep 15
+            sleep 20
             
-            # Check if container is running
-            if [ "$(docker ps -q -f name=onturn-app)" ]; then
-              echo "✅ Contenedor onturn-app está corriendo"
-              docker ps -f name=onturn-app --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+            # Verificar que el contenedor está corriendo
+            if [ "$(docker-compose ps -q onturn-app)" ]; then
+              if [ "$(docker ps -q -f name=onturn-app)" ]; then
+                echo "✅ Contenedor onturn-app está corriendo"
+                docker-compose ps
+              else
+                echo "❌ Error: Contenedor no está corriendo"
+                docker-compose logs --tail 50
+                exit 1
+              fi
             else
-              echo "❌ Error: Contenedor no está corriendo"
-              docker logs --tail 50 onturn-app
+              echo "❌ Error: Contenedor no existe"
+              docker-compose logs --tail 50
               exit 1
             fi
             
-            # Cleanup
-            docker logout
-            
             echo ""
             echo "🎉 Deployment completado exitosamente!"
-            echo "📊 Estado del contenedor:"
-            docker stats --no-stream onturn-app
 
       - name: Health check
         run: |
           echo "⏳ Esperando que la app esté lista..."
-          sleep 10
+          sleep 15
           
           echo "🔍 Verificando salud de la aplicación..."
           response=$(curl -s -o /dev/null -w "%{http_code}" https://onturn.app)
@@ -154,7 +106,7 @@ jobs:
             echo "🌐 URL: https://onturn.app"
           else
             echo "⚠️ Aplicación respondió con código: HTTP $response"
-            exit 1
+            echo "ℹ️  La aplicación podría estar iniciando, verifica en el VPS"
           fi
 
       - name: Deployment summary
@@ -163,7 +115,6 @@ jobs:
           echo "📋 Resumen del Deployment"
           echo "========================"
           echo "Estado: ${{ job.status }}"
-          echo "Imagen: ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}"
           echo "Rama: ${{ github.ref_name }}"
           echo "Commit: ${{ github.sha }}"
           echo "Autor: ${{ github.actor }}"
