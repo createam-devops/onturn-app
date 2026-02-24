@@ -7,9 +7,52 @@ on:
       - production
   workflow_dispatch:
 
+env:
+  DOCKER_IMAGE: trcdev/onturn-app
+  DOCKER_TAG: latest
+
 jobs:
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKER_IMAGE }}:latest
+            ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+          build-args: |
+            NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+            NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+            NEXT_PUBLIC_SITE_URL=https://onturn.app
+            NEXT_PUBLIC_VAPID_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_VAPID_PUBLIC_KEY }}
+            NEXT_PUBLIC_ENABLE_PWA=true
+          cache-from: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache
+          cache-to: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache,mode=max
+
+      - name: Image digest
+        run: echo "✅ Image pushed - ${{ env.DOCKER_IMAGE }}:latest y ${{ env.DOCKER_IMAGE }}:${{ github.sha }}"
+
   deploy:
     name: Deploy to VPS
+    needs: build-and-push
     runs-on: ubuntu-latest
     
     steps:
@@ -23,72 +66,93 @@ jobs:
           script: |
             echo "🚀 Iniciando deployment de OnTurn..."
             
-            # Crear directorio si no existe y clonar repositorio
-            if [ ! -d "/var/www/onturn-app" ]; then
-              echo "📁 Creando directorio del proyecto..."
-              mkdir -p /var/www
-              cd /var/www
-              git clone https://github.com/createam-devops/onturn-app.git
-              cd onturn-app
-            else
-              echo "📂 Directorio existe, actualizando código..."
-              cd /var/www/onturn-app
-              git fetch origin
-              git reset --hard origin/${{ github.ref_name }}
-            fi
-            echo "✅ Código actualizado"
+            # Crear directorio si no existe
+            mkdir -p /var/www/onturn-app
+            cd /var/www/onturn-app
+            
+            # Crear docker-compose.yml si no existe
+            cat > docker-compose.yml << 'COMPOSE_EOF'
+            services:
+              app:
+                container_name: onturn-app
+                image: trcdev/onturn-app:latest
+                restart: always
+                ports:
+                  - "3000:3000"
+                environment:
+                  - NODE_ENV=production
+                  - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+                  - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+                  - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
+                  - NEXT_PUBLIC_VAPID_PUBLIC_KEY=${NEXT_PUBLIC_VAPID_PUBLIC_KEY}
+                  - VAPID_PRIVATE_KEY=${VAPID_PRIVATE_KEY}
+                  - NEXT_PUBLIC_ENABLE_PWA=${NEXT_PUBLIC_ENABLE_PWA}
+                env_file:
+                  - .env
+                networks:
+                  - onturn-network
+                healthcheck:
+                  test: ["CMD", "curl", "-f", "http://localhost:3000"]
+                  interval: 30s
+                  timeout: 10s
+                  retries: 3
+                  start_period: 40s
+
+            networks:
+              onturn-network:
+                driver: bridge
+            COMPOSE_EOF
+            echo "✅ docker-compose.yml creado/actualizado"
             
             # Crear/actualizar archivo .env
             cat > .env << 'EOF'
-            # Supabase
             NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
             NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-            
-            # VAPID Keys
             NEXT_PUBLIC_VAPID_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_VAPID_PUBLIC_KEY }}
             VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }}
-            
-            # PWA
             NEXT_PUBLIC_ENABLE_PWA=true
             NEXT_PUBLIC_SITE_URL=https://onturn.app
-            
-            # Production
             NODE_ENV=production
             PORT=3000
             EOF
             echo "✅ Variables de entorno configuradas"
             
-            # Detener contenedores anteriores
+            # Login to Docker Hub
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+            echo "✅ Logueado en Docker Hub"
+            
+            # Pull latest image
+            docker pull trcdev/onturn-app:latest
+            echo "✅ Imagen descargada desde Docker Hub"
+            
+            # Stop and remove old containers
             docker-compose down 2>/dev/null || true
             echo "✅ Contenedores anteriores detenidos"
             
-            # Limpiar imágenes antiguas
+            # Remove old images to free space  
             docker image prune -af --filter "until=24h" || true
             echo "✅ Imágenes antiguas eliminadas"
             
-            # Construir y levantar contenedores
-            docker-compose up -d --build
-            echo "✅ Contenedores construidos e iniciados"
+            # Start new containers (pull mode, no build)
+            docker-compose up -d
+            echo "✅ Nuevos contenedores iniciados"
             
-            # Esperar que la aplicación esté lista
+            # Wait for container to be healthy
             echo "⏳ Esperando que la aplicación esté lista..."
             sleep 20
             
-            # Verificar que el contenedor está corriendo
-            if [ "$(docker-compose ps -q onturn-app)" ]; then
-              if [ "$(docker ps -q -f name=onturn-app)" ]; then
-                echo "✅ Contenedor onturn-app está corriendo"
-                docker-compose ps
-              else
-                echo "❌ Error: Contenedor no está corriendo"
-                docker-compose logs --tail 50
-                exit 1
-              fi
+            # Check if container is running
+            if [ "$(docker ps -q -f name=onturn-app)" ]; then
+              echo "✅ Contenedor onturn-app está corriendo"
+              docker ps -f name=onturn-app --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
             else
-              echo "❌ Error: Contenedor no existe"
-              docker-compose logs --tail 50
+              echo "❌ Error: Contenedor no está corriendo"
+              docker logs --tail 50 onturn-app
               exit 1
             fi
+            
+            # Cleanup
+            docker logout
             
             echo ""
             echo "🎉 Deployment completado exitosamente!"
