@@ -6,7 +6,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X, Download, Smartphone } from 'lucide-react'
+import { X, Download, Smartphone, ExternalLink } from 'lucide-react'
 import { promptPWAInstall, isPWAInstalled, getPWAContext } from '@/lib/pwa-utils'
 import { usePathname } from 'next/navigation'
 
@@ -17,15 +17,21 @@ interface PWAInstallPromptProps {
 export default function PWAInstallPrompt({ context }: PWAInstallPromptProps) {
   const [showPrompt, setShowPrompt] = useState(false)
   const [isInstalling, setIsInstalling] = useState(false)
+  const [wasInstalled, setWasInstalled] = useState(false)
   const pathname = usePathname()
 
   const pwaContext = context || getPWAContext(pathname)
 
   useEffect(() => {
-    // No mostrar si ya está instalada
+    // No mostrar si ya está en modo standalone (usando la PWA)
     if (isPWAInstalled()) {
       return
     }
+
+    // Verificar si ya fue instalada anteriormente
+    const installKey = `pwa-installed-${pwaContext}`
+    const previouslyInstalled = localStorage.getItem(installKey) === 'true'
+    setWasInstalled(previouslyInstalled)
 
     // NO mostrar en landing page
     if (pathname === '/' || pathname.startsWith('/[slug]')) {
@@ -72,12 +78,22 @@ export default function PWAInstallPrompt({ context }: PWAInstallPromptProps) {
   }, [pathname, pwaContext])
 
   const handleInstall = async () => {
+    if (wasInstalled) {
+      // Si ya estaba instalada, intentar abrirla (navegar con intent)
+      // No hay forma directa de abrir la PWA, así que simplemente mostramos mensaje
+      alert('La app ya está instalada en tu dispositivo. Búscala en tu pantalla de inicio.')
+      handleDismiss()
+      return
+    }
+
     setIsInstalling(true)
 
     try {
       const accepted = await promptPWAInstall()
 
       if (accepted) {
+        // Guardar que se instaló
+        localStorage.setItem(`pwa-installed-${pwaContext}`, 'true')
         setShowPrompt(false)
       } else {
         setIsInstalling(false)
@@ -102,9 +118,15 @@ export default function PWAInstallPrompt({ context }: PWAInstallPromptProps) {
   }
 
   const descriptions = {
-    'super-admin': 'Gestiona todo el sistema desde tu dispositivo',
-    business: 'Gestiona tu negocio desde cualquier lugar',
-    customer: 'Reserva servicios más rápido y sin conexión',
+    'super-admin': wasInstalled ? 'Abre la app desde tu pantalla de inicio' : 'Gestiona todo el sistema desde tu dispositivo',
+    business: wasInstalled ? 'Abre la app desde tu pantalla de inicio' : 'Gestiona tu negocio desde cualquier lugar',
+    customer: wasInstalled ? 'Abre la app desde tu pantalla de inicio' : 'Reserva servicios más rápido y sin conexión',
+  }
+
+  const actionLabels = {
+    'super-admin': wasInstalled ? 'Ya Instalada' : 'Instalar',
+    business: wasInstalled ? 'Ya Instalada' : 'Instalar',
+    customer: wasInstalled ? 'Ya Instalada' : 'Instalar',
   }
 
   return (
@@ -119,7 +141,7 @@ export default function PWAInstallPrompt({ context }: PWAInstallPromptProps) {
           {/* Contenido */}
           <div className="flex-1 min-w-0">
             <h3 className="text-lg font-bold text-white mb-1">
-              Instalar {appNames[pwaContext]}
+              {wasInstalled ? appNames[pwaContext] : `Instalar ${appNames[pwaContext]}`}
             </h3>
             <p className="text-sm text-blue-100 line-clamp-2">
               {descriptions[pwaContext]}
@@ -133,9 +155,9 @@ export default function PWAInstallPrompt({ context }: PWAInstallPromptProps) {
               disabled={isInstalling}
               className="bg-white hover:bg-blue-50 text-blue-700 font-medium px-6 py-3 rounded-xl flex items-center gap-2 transition-colors disabled:opacity-50"
             >
-              <Download className="h-4 w-4" />
+              {wasInstalled ? <ExternalLink className="h-4 w-4" /> : <Download className="h-4 w-4" />}
               <span className="hidden sm:inline">
-                {isInstalling ? 'Instalando...' : 'Instalar'}
+                {isInstalling ? 'Instalando...' : actionLabels[pwaContext]}
               </span>
             </button>
 

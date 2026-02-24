@@ -203,9 +203,9 @@ export function Header() {
                 {/* Landing Specific Button: Ofrecer Servicios (NO en PWA standalone) */}
                 {pathname === '/' && userType !== 'business_owner' && !isStandalone && (
                   <Link href="/registro-negocio">
-                    <Button variant="default" className="rounded-full shadow-md hover:shadow-lg transition-all gap-2 bg-[#00A896] hover:bg-[#008f80] text-white border-transparent px-4 mr-2">
-                      <Briefcase size={18} />
-                      <span>Soy Negocio</span>
+                    <Button variant="default" className="rounded-full shadow-md hover:shadow-lg transition-all gap-2 bg-[#00A896] hover:bg-[#008f80] text-white border-transparent px-3 md:px-4 mr-2">
+                      <Briefcase size={18} className="flex-shrink-0" />
+                      <span className="hidden sm:inline">Soy Negocio</span>
                     </Button>
                   </Link>
                 )}
@@ -306,9 +306,9 @@ export function Header() {
                 {/* Landing Specific Button: Ofrecer Servicios (NO en PWA standalone) */}
                 {pathname === '/' && !isStandalone && (
                   <Link href="/registro-negocio">
-                    <Button variant="default" className="rounded-full shadow-md hover:shadow-lg transition-all gap-2 bg-[#00A896] hover:bg-[#008f80] text-white border-transparent px-4 mr-2">
-                      <Briefcase size={18} />
-                      <span>Soy Negocio</span>
+                    <Button variant="default" className="rounded-full shadow-md hover:shadow-lg transition-all gap-2 bg-[#00A896] hover:bg-[#008f80] text-white border-transparent px-3 md:px-4 mr-2">
+                      <Briefcase size={18} className="flex-shrink-0" />
+                      <span className="hidden sm:inline">Soy Negocio</span>
                     </Button>
                   </Link>
                 )}
